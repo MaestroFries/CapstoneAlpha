@@ -11,10 +11,10 @@ extern "C" {
 bool load_image(std::vector<unsigned char>& image, const std::string& filename, int& x, int& y)
 {
     int n;
-    unsigned char* data = stbi_load(filename.c_str(), &x, &y, &n, 4);
+    unsigned char* data = stbi_load(filename.c_str(), &x, &y, &n, 3);
     if (data != nullptr)
     {
-        image = std::vector<unsigned char>(data, data + x * y * 4);
+        image = std::vector<unsigned char>(data, data + x * y * 3);
     }
     stbi_image_free(data);
     return (data != nullptr);
@@ -22,7 +22,7 @@ bool load_image(std::vector<unsigned char>& image, const std::string& filename, 
 
 int main()
 {
-    std::string filename = "C:/Users/781932/Desktop/mario.jpg";
+    std::string filename = "C:/Users/781932/Desktop/mario.jpg"; //change file location to whatever you p l e a s e.
 
     int width, height;
     std::vector<unsigned char> image;
@@ -36,16 +36,15 @@ int main()
     std::cout << "Image width = " << width << '\n';
     std::cout << "Image height = " << height << '\n';
 
-    const size_t RGBA = 4;
+    const size_t RGB = 3;
 
     int x = 50;
     int y = 230;
-    size_t index = RGBA * (y * width + x);
-    std::cout << "RGBA pixel @ (x=3, y=4): "
+    size_t index = RGB * (y * width + x);
+    std::cout << "RGB pixel @ (x=3, y=4): "
         << static_cast<int>(image[index + 0]) << " "
         << static_cast<int>(image[index + 1]) << " "
-        << static_cast<int>(image[index + 2]) << " "
-        << static_cast<int>(image[index + 3]) << '\n';
+        << static_cast<int>(image[index + 2]) << "\n";
 
     return 0;
 }
