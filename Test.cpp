@@ -22,7 +22,7 @@ bool load_image(std::vector<unsigned char>& image, const std::string& filename, 
 
 int main()
 {
-    std::string filename = "C:/Users/781932/Desktop/mario.jpg"; //change file location to whatever you p l e a s e.
+    std::string filename = "C:/Users/781932/Desktop/mario.jpg";
 
     int width, height;
     std::vector<unsigned char> image;
@@ -38,13 +38,23 @@ int main()
 
     const size_t RGB = 3;
 
-    int x = 50;
-    int y = 230;
-    size_t index = RGB * (y * width + x);
-    std::cout << "RGB pixel @ (x=3, y=4): "
-        << static_cast<int>(image[index + 0]) << " "
-        << static_cast<int>(image[index + 1]) << " "
-        << static_cast<int>(image[index + 2]) << "\n";
+
+
+    
+    
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            size_t index = RGB * (y * width + x);
+            std::cout << "RGB pixel @ (x = " << x << ", y = " << y << "):"
+                << static_cast<int>(image[index + 0]) << " "
+                << static_cast<int>(image[index + 1]) << " "
+                << static_cast<int>(image[index + 2]) << "\n"
+                << "---------------------\n";
+        }
+    }
+
 
     return 0;
 }
