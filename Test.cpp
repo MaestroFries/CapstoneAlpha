@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 extern "C" {
@@ -20,11 +21,22 @@ bool load_image(std::vector<unsigned char>& image, const std::string& filename, 
     return (data != nullptr);
 }
 
+std::string rgb2hex(int r, int g, int b, bool with_head)
+{
+    std::stringstream ss;
+    if (with_head)
+        ss << "#";
+    ss << std::hex << (r << 16 | g << 8 | b);
+    return ss.str();
+}
+
 int main()
 {
-    std::string filename = "C:/Users/781932/Desktop/mario.jpg";
+    std::string filename = "C:/Users/781932/Desktop/creeper.jpg";
 
     int width, height;
+    int r,g,b;
+
     std::vector<unsigned char> image;
     bool success = load_image(image, filename, width, height);
     if (!success)
@@ -52,6 +64,15 @@ int main()
                 << static_cast<int>(image[index + 1]) << " "
                 << static_cast<int>(image[index + 2]) << "\n"
                 << "---------------------\n";
+            r = static_cast<int>(image[index + 0]);
+            g = static_cast<int>(image[index + 1]);
+            b = static_cast<int>(image[index + 2]);
+            std::cout << " Hex: " << rgb2hex(r, g, b, true) << std::endl;
+        }
+
+        if (x == width)
+        {
+            return 0;
         }
     }
 
