@@ -36,6 +36,7 @@ int main()
 
     int width, height;
     int r,g,b;
+    int x, y;
 
     std::vector<unsigned char> image;
     bool success = load_image(image, filename, width, height);
@@ -44,17 +45,24 @@ int main()
         std::cout << "Error loading image\n";
         return 1;
     }
-
+    std::cout << "Image Location: " << filename << "\n";
     std::cout << "Image width = " << width << '\n';
     std::cout << "Image height = " << height << '\n';
 
     const size_t RGB = 3;
 
+    std::cout << " Select x pixel coordinate:\n";
+    std::cin >> x;
+    std::cout << "X: " << x << "\n Select y pixel coordinate:\n";
+    std::cin >> y;
+    std::cout << "X: " << x << " | Y: " << y << "\n";
+
+
 
 
     
     
-    for (int x = 0; x < width; x++)
+    /*for (int x = 0; x < width; x++)
     {
         for (int y = 0; y < height; y++)
         {
@@ -70,11 +78,13 @@ int main()
             std::cout << " Hex: " << rgb2hex(r, g, b, true) << std::endl;
         }
 
+
         if (x == width)
         {
             return 0;
         }
     }
+    */
 
 
     return 0;
