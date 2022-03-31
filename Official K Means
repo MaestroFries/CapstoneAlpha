@@ -31,18 +31,17 @@ void main()
 
     y1 = 0;
 
-    for (i1 = 0; i1 < 10; i1++)
+    /*xfor (i1 = 0; i1 < 10; i1++)
     {
-        cout << k0[0][i1] << " | " << k0[1][y1] << "\n
-            ";
+        cout << k0[0][i1] << " | " << k0[1][y1] << "\n";
         y1++;
-    }
+    } */
     
 
 
 
     //initial means
-    /*double m1;
+    double m1;
     double m2;
 
     cout << "\n Enter initial mean 1:";
@@ -123,7 +122,7 @@ void main()
     cout << "\n Clusters created";
 
     //ending
-    */
+    
     _getch();
 
 }
