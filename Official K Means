@@ -1,132 +1,177 @@
 #include<iostream>
 #include<conio.h>
 #include<fstream>
+#include<cmath>
 
 
+/*
+Notes:
+FIX DECIMAL POINTS FOR DISTANCE
+
+*/
 using namespace std;
+
+int state = 0 ;
 void main()
 {
 
-    int i1, i2, i3, y1, y2, y3, t1, t2;
+    int i1, i2, i3, t1, t2;
+    double t1x, t1y, t2x, t2y;
 
+    //t1 and t2 are distance
     float k0[10][10];
     float k1[10][10];
     float k2[10][10];
 
-    cout << "\nEnter 20 numbers for x and y:\n";
+    cout << "\nEnter 10 x and y coordinates: (e.g 1 3, 5 9, 2, 5)\n";
 
-    y1 = 0;
+
 
     for (i1 = 0; i1 < 10; i1++) //takes in each RGB? 
     {
 
         cin >> k0[0][i1];
-        cin >> k0[1][y1];
+        cin >> k0[1][i1];
 
-        std::cout << k0[0][i1] << " " << k0[1][y1] << "\n";
-        y1++;
+        std::cout << k0[0][i1] << " " << k0[1][i1] << "\n";
+
     }
 
     cout << "x : y\n";
 
-    y1 = 0;
+
 
     /*xfor (i1 = 0; i1 < 10; i1++)
     {
-        cout << k0[0][i1] << " | " << k0[1][y1] << "\n";
-        y1++;
+        cout << k0[0][i1] << " | " << k0[1][i1] << "\n";
+
     } */
-    
+
 
 
 
     //initial means
-    double m1;
-    double m2;
+    float m1x;
+    float m1y;
+    float m2x;
+    float m2y;
 
-    cout << "\n Enter initial mean 1:";
-    cin >> m1;
-    cout << "\n Enter initial mean 2:";
-    cin >> m2;
+    cout << "\n Enter initial mean 1 (x):";
+    cin >> m1x;
+    cout << "\n Enter initial mean 1 (y):";
+    cin >> m1y;
+    cout << "\n Enter initial mean 2: x)";
+    cin >> m2x;
+    cout << "\n Enter initial mean 2: (y)";
+    cin >> m2y;
 
-    int om1, om2;    //old means
 
+
+    float om1x, om1y, om2x, om2y;    //old means
     do
     {
 
         //saving old means
-        om1 = m1;
-        om2 = m2;
+        om1x = m1x;
+        om1y = m1y;
+        om2x = m2x;
+        om2y = m2y;
 
         //creating clusters
         i1 = i2 = i3 = 0;
         for (i1 = 0; i1 < 10; i1++)
         {
             //calculating distance to means
-            t1 = k0[i1] - m1;
+            t1 = sqrt(pow((k0[0][i1] - m1x), 2.0) + pow((k0[1][i1] - m1y), 2.0));
+            cout << t1 << endl;
             if (t1 < 0) { t1 = -t1; }
 
-            t2 = k0[i1] - m2;
+            t2 = sqrt(pow((k0[0][i1] - m2x), 2.0) + pow((k0[1][i1] - m2y), 2.0));
+            cout << t2 << endl;
             if (t2 < 0) { t2 = -t2; }
 
+            //calculating if it is t1 is closer to first or second mean
             if (t1 < t2)
             {
                 //near to first mean
-                k1[i2] = k0[i1];
+                k1[0][i2] = k0[0][i1];
+                k1[1][i2] = k0[1][i1];
                 i2++;
+                //cout << k0[0][i1] << ", " << k0[1][i1] << "is closer to the first mean.\n";
+
             }
             else
             {
                 //near to second mean
-                k2[i3] = k0[i1];
+                k2[0][i3] = k0[0][i1];
+                k2[1][i3] = k0[1][i1];
                 i3++;
+                //cout << k0[0][i1] << ", " << k0[1][i1] << "is closer to the second mean.\n";
             }
 
         }
+        
 
         t2 = 0;
+        t2x = 0;
+        t2y = 0;
+        
         //calculating new mean
         for (t1 = 0; t1 < i2; t1++)
         {
-            t2 = t2 + k1[t1];
+            t2x = t2 + k1[0][t1];
+            t2y = t2 + k1[1][t1];
         }
-        m1 = t2 / i2;
-
+        m1x = t2x / i2;
+        m1y = t2y / i2;
+        
         t2 = 0;
+        t2x = 0;
+        t2y = 0;
+
         for (t1 = 0; t1 < i3; t1++)
         {
-            t2 = t2 + k2[t1];
+            t2x = t2 + k2[0][t1];
+            t2y = t2 + k2[1][t1];
         }
-        m2 = t2 / i3;
+
+        m2x = t2x / i3;
+        m2y = t2y / i3;
+
+
 
         //printing clusters
-        cout << "\nCluster 1:";
+        cout << "\nCluster 1:\n";
         for (t1 = 0; t1 < i2; t1++)
         {
-            cout << k1[t1] << " ";
-            myFile << k1[t1] << ",";
-        }
-        cout << "\nm1=" << m1;
+            cout << k1[0][t1] << ", " << k1[1][t1] << " | ";
 
-        cout << "\nCluster 2:";
-        for (t1 = 0; t1 < i3; t1++)
-        { 
-            cout << k2[t1] << " ";
-            myFile << k2[t1] << endl;
         }
-        cout << "\nm2=" << m2;
+        cout << "\nm1=" << m1x << ", " << m1y;
+
+        cout << "\nCluster 2:\n";
+
+        for (t1 = 0; t1 < i3; t1++)
+        {
+            cout << k2[0][t1] << ", " << k2[1][t1] << " | ";
+        }
+        cout << "\nm2=" << m2x << ", " << m2y;
 
         cout << "\n ----";
-    } while (m1 != om1 && m2 != om2);
+ 
+
+
+    } while (m1x!=om1x&&m1y!=om1y&&m2x!=om2x&&m2y!=om2y);
 
     cout << "\n Clusters created";
 
     //ending
-    
+
     _getch();
 
-}
-
+    
+    
+} 
 /* OUTPUT
 
 
