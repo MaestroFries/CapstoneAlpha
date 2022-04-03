@@ -1,0 +1,68 @@
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "iostream"
+
+using namespace cv;
+using namespace std;
+
+
+std::string rgb2hex(int r, int g, int b, bool with_head)
+{
+    std::stringstream ss;
+    if (with_head)
+        ss << "#";
+    ss << std::hex << (r << 16 | g << 8 | b);
+    return ss.str();
+}
+
+int main()
+{
+    int x, y;
+    int b, g, r;
+    Mat src1;
+    std::string image_path = samples::findFile("D:/Documents/Francis Reyes - Assignments/Capstone Alpha/Resources/mariosprite.jpg");
+    src1 = imread(image_path, IMREAD_COLOR);
+
+
+    Mat gray;
+
+    // know the number of channels the image has
+    cout << "Image Path: " << image_path << endl;
+    cout << "Image Height: " << src1.cols << endl;
+    cout << "Image Width: " << src1.rows << endl;
+    cout << "Original image channels: " << src1.channels()  << endl << endl;
+
+    // ******************* READ the Pixel intensity *********************
+        // single channel grey scale image (type 8UC1) and pixel coordinates x=5 and y=2
+        // by convention, {row number = y} and {column number = x}
+        // intensity.val[0] contains a value from 0 to 255
+
+
+    // 3 channel image with BGR color (type 8UC3)
+    // the values can be stored in "int" or in "uchar". Here int is used.
+
+    cout << "Select x pixel coordinate:\n";
+    cin >> x;
+    cout << "X: " << x << "\nSelect y pixel coordinate:\n";
+    cin >> y;
+    cout << "X: " << x << " | Y: " << y << "\n\n\n\n";
+
+    Vec3b intensity2 = src1.at<Vec3b>(x, y);
+    b = intensity2.val[0];
+    g = intensity2.val[1];
+    r = intensity2.val[2];
+
+    cout << "RGB Intensity = " << endl << " " << r << " " << g << " " << b << endl;
+
+    circle(src1, Point(x, y), 10, Scalar(0, 255, 0), 2);
+    putText(src1, rgb2hex(r, g, b, true), Point(x + 30, y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2, false);
+    namedWindow("Original image");
+    imshow("Original image", src1);
+    waitKey(0);
+    destroyWindow("Original image");
+}
+
+
+//Goal: change colourscheme code to be just be opencv.
+//learn how to use opencv img functions.
