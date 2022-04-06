@@ -20,8 +20,10 @@ int main()
 {
     int x, y;
     int b, g, r;
+    int response;
+    bool state = true;
     Mat src1;
-    std::string image_path = samples::findFile("D:/Documents/Francis Reyes - Assignments/Capstone Alpha/Resources/mariosprite.jpg");
+    std::string image_path = samples::findFile("C:/Users/Francis/Documents/images/mario.jpg");
     src1 = imread(image_path, IMREAD_COLOR);
 
 
@@ -31,7 +33,7 @@ int main()
     cout << "Image Path: " << image_path << endl;
     cout << "Image Height: " << src1.cols << endl;
     cout << "Image Width: " << src1.rows << endl;
-    cout << "Original image channels: " << src1.channels()  << endl << endl;
+    cout << "Original image channels: " << src1.channels() << endl << endl;
 
     // ******************* READ the Pixel intensity *********************
         // single channel grey scale image (type 8UC1) and pixel coordinates x=5 and y=2
@@ -41,26 +43,36 @@ int main()
 
     // 3 channel image with BGR color (type 8UC3)
     // the values can be stored in "int" or in "uchar". Here int is used.
+    while (state)
+    {
+        cout << "Select x pixel coordinate:\n";
+        cin >> x;
+        cout << "X: " << x << "\nSelect y pixel coordinate:\n";
+        cin >> y;
+        cout << "X: " << x << " | Y: " << y << "\n\n\n\n";
 
-    cout << "Select x pixel coordinate:\n";
-    cin >> x;
-    cout << "X: " << x << "\nSelect y pixel coordinate:\n";
-    cin >> y;
-    cout << "X: " << x << " | Y: " << y << "\n\n\n\n";
+        Vec3b intensity2 = src1.at<Vec3b>(x, y);
+        b = intensity2.val[0];
+        g = intensity2.val[1];
+        r = intensity2.val[2];
 
-    Vec3b intensity2 = src1.at<Vec3b>(x, y);
-    b = intensity2.val[0];
-    g = intensity2.val[1];
-    r = intensity2.val[2];
+        cout << "RGB Intensity = " << endl << " " << r << " " << g << " " << b << endl;
 
-    cout << "RGB Intensity = " << endl << " " << r << " " << g << " " << b << endl;
+        circle(src1, Point(x, y), 10, Scalar(0, 255, 0), 2);
+        putText(src1, rgb2hex(r, g, b, true), Point(x + 30, y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2, false);
+        namedWindow("Original image");
+        imshow("Original image", src1);
+        waitKey(0);
+        destroyWindow("Original image");
 
-    circle(src1, Point(x, y), 10, Scalar(0, 255, 0), 2);
-    putText(src1, rgb2hex(r, g, b, true), Point(x + 30, y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2, false);
-    namedWindow("Original image");
-    imshow("Original image", src1);
-    waitKey(0);
-    destroyWindow("Original image");
+        std::cout << "Do you want to continue your search? 1 = yes | 0 = no\n";
+        std::cin >> response;
+        if (response == 0)
+        {
+            state = !state;
+        }
+    }
+
 }
 
 
