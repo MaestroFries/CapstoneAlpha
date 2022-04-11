@@ -25,13 +25,20 @@ Mat showCenters(const Mat& centers, const Mat& data, int siz = 64) {
     // make  a horizontal bar of K color patches:
     Mat draw(siz, siz * cent.rows, cent.type(), Scalar::all(0));
 
-    cout << endl << "BGR Dominance in order\n";
+    cout << endl << "BGR Dominance\n";
     for (int i = 0; i < cent.rows; i++) {
         // set the resp. ROI to hat value (just fill it):
         draw(Rect(i * siz, 0, siz, siz)) = cent.at<Vec3f>(i, 0);
-        cout << i+1 << ": " <<cent.at<Vec3f>(i, 0) << endl << endl;
-        //cout << dat << endl;
+
+        double numerator = static_cast<float>(countNonZero(labels == i));
+        double denominator = static_cast<float>(data.total());
+
+        double percentage = numerator/denominator;
+
         
+        cout << "Cluster " << i + 1 << ": " << cent.at<Vec3f>(i, 0) << " | Pixel Count: " << countNonZero(labels == i) << " | Percentage: " << std::setprecision(3) << percentage*100.0 << "% \n";
+        //cout << dat << endl;
+
     }
     draw.convertTo(draw, CV_8U);
 
@@ -67,50 +74,62 @@ int main()
         data = data.reshape(1, data.total());
 
         double compactness = kmeans(data, k, labels, TermCriteria(TermCriteria::MAX_ITER, 10, 1.0), 3, KMEANS_PP_CENTERS, centers);
-        
-        
-        
+
+
+
 
         //cout << labels;
+
+        //int t = std::count(labels., labels, 0);
+
+
         // reshape both to a single row of Vec3f pixels:
-        
+
         centers = centers.reshape(3, centers.rows);
         data = data.reshape(3, data.rows);
 
         // replace pixel values with their center value:
         Vec3f* p = data.ptr<Vec3f>();
         for (size_t i = 0; i < data.rows; i++) {
-            int center_id = labels.at<int>(i);
-           
-            
-            for (int l = 0; l < k; l++)
-            {
-                if (center_id == 0)
-                {
-                    triforce[l] += 1;[]
-                    
-                   //fix this!!!
-                      
-                    
-                }
-            }
+            int center_id = labels.at<int>(i, 0);
+
 
             p[i] = centers.at<Vec3f>(center_id);
-            
+
+
+
         }
 
-        cout << triforce[0];
+        Mat b;
+        Mat g;
+        Mat r;
 
-        
+        extractChannel(centers, b, 0);
+        extractChannel(centers, g, 1);
+        extractChannel(centers, r, 2);
+
+
+        //cout << b.at<float>(0) << endl;
+        //cout << g.at<float>(0) << endl;
+        //cout << r.at<float>(0) << endl;
+
+        char hexColour[8];
+
+        std::snprintf(hexColour, sizeof hexColour, "#%02x%02x%02x", r, g, b);
+
+        //std::cout << hexColour;
+        //std::fill(hexColour[0], hexColour[8], 0);
+
+        //04-09 fix hex later!!
         // back to 2d, and uchar:
         src = data.reshape(3, src.rows);
         src.convertTo(src, CV_8U);
 
-        std ::cout << "compactness at K = " << k << ": " << compactness << endl;
+        std::cout << "compactness at K = " << k << ": " << compactness << endl;
 
         //visualize data:
         imshow("Image", src);
-        showCenters(centers, data);
+        showCenters(centers, labels, data);
 
         destroyAllWindows();
     }
